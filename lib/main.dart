@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon_game/button.dart';
+import 'package:pokemon_game/characters/boy.dart';
+import 'package:pokemon_game/maps/littleroot.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,10 +25,48 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void moveUp() {}
-  void moveDown() {}
-  void moveLeft() {}
-  void moveRight() {}
+  /*
+  VARIABLES
+  */
+
+  //littleroot
+  double mapX = 0;
+  double mapY = 0;
+
+  //boy character
+  int boySpriteCount = 0; // 0 for standing, 1-2 for walking
+  String boyDirection = 'Down';
+
+  // game stuff
+  String currentMapLocation = 'littleroot';
+
+  void moveUp() {
+    boyDirection = 'Up';
+    setState(() {
+      mapY += 0.2;
+    });
+  }
+
+  void moveDown() {
+    boyDirection = 'Down';
+    setState(() {
+      mapY -= 0.2;
+    });
+  }
+
+  void moveLeft() {
+    boyDirection = 'Left';
+    setState(() {
+      mapX += 0.2;
+    });
+  }
+
+  void moveRight() {
+    boyDirection = 'Right';
+    setState(() {
+      mapX -= 0.2;
+    });
+  }
 
   void pressedA() {}
 
@@ -41,6 +81,25 @@ class _HomePageState extends State<HomePage> {
             aspectRatio: 1,
             child: Container(
               color: Colors.black,
+              child: Stack(
+                children: [
+                  //little root
+                  LittleRoot(
+                    x: mapX,
+                    y: mapY,
+                    currentMap: currentMapLocation,
+                  ),
+
+                  Container(
+                    alignment: Alignment(0, 0),
+                    child: MyBoy(
+                      location: currentMapLocation,
+                      boySpriteCount: boySpriteCount,
+                      direction: boyDirection,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
