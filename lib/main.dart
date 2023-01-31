@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:pokemon_game/button.dart';
 import 'package:pokemon_game/characters/boy.dart';
@@ -30,8 +32,8 @@ class _HomePageState extends State<HomePage> {
   */
 
   //littleroot
-  double mapX = 0;
-  double mapY = 0;
+  double mapX = 0.910;
+  double mapY = 0.35;
 
   //boy character
   int boySpriteCount = 0; // 0 for standing, 1-2 for walking
@@ -39,38 +41,92 @@ class _HomePageState extends State<HomePage> {
 
   // game stuff
   String currentMapLocation = 'littleroot';
+  double step = 0.25;
+
+  // no mans land for littleroot
+  List<List<double>> noMansLandLittleroot = [
+    [-0.08, 1.85],
+    [-0.33, 1.85],
+  ];
 
   void moveUp() {
     boyDirection = 'Up';
     setState(() {
-      mapY += 0.2;
+      mapY += step;
     });
+    animateWalk();
   }
 
   void moveDown() {
     boyDirection = 'Down';
     setState(() {
-      mapY -= 0.2;
+      mapY -= step;
     });
+    animateWalk();
   }
 
   void moveLeft() {
     boyDirection = 'Left';
     setState(() {
-      mapX += 0.2;
+      mapX += step;
     });
+    animateWalk();
   }
 
   void moveRight() {
     boyDirection = 'Right';
     setState(() {
-      mapX -= 0.2;
+      mapX -= step;
     });
+    animateWalk();
   }
 
   void pressedA() {}
 
   void pressedB() {}
+
+  void animateWalk() {
+    print('X: ' + mapX.toString() + ', Y: ' + mapY.toString());
+
+    Timer.periodic(const Duration(milliseconds: 50), (timer) {
+      setState(() {
+        boySpriteCount++;
+      });
+
+      if (boySpriteCount == 3) {
+        boySpriteCount = 0;
+        timer.cancel();
+      }
+    });
+  }
+
+// function to determine no mans land
+  // bool canMoveTo(String direction, var noMansLand, double x, double y) {
+  //   double stepX = 0;
+  //   double stepY = 0;
+
+  //   if (direction == 'Left') {
+  //     stepX = step;
+  //     stepY = 0;
+  //   } else if (direction == 'Right') {
+  //     stepX = -step;
+  //     stepY = 0;
+  //   } else if (direction == 'Up') {
+  //     stepX = 0;
+  //     stepY = step;
+  //   } else if (direction == 'Down') {
+  //     stepX = 0;
+  //     stepY = -step;
+  //   }
+
+  //   for (int i = 0; i < noMansLand.length; i++) {
+  //     if((cleanNum(noMansLand[i][0]) == cleanNum(x + stepX)) &&
+  //     (cleanNum(noMansLand[i][1]) == cleanNum(y+stepY))) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
 
   @override
   Widget build(BuildContext context) {
